@@ -12,10 +12,10 @@ function getArrayParams(arr) {
     }
     sum += arr[i]
 }
-let q = sum/arr1.length;
+let q = sum/arr.length;
 let avg = Number(q.toFixed(2));
 
-  return { min: min, max: max, avg: avg };
+  return { min, max, avg};
 }
 
 // Задание 2
@@ -31,10 +31,10 @@ function worker(arr) {
 
 
 function makeWork(arrOfArr, func) {
-  let max = func(arr[0]);
+  let max = func(arrOfArr[0]);
   let sumResults = 0;
-  for (let i = 0; i < arr.length; i++ ){
-    sumResults = func(arr[i]);
+  for (let i = 0; i < arrOfArr.length; i++ ){
+    sumResults = func(arrOfArr[i]);
     if (max < sumResults){
       max = sumResults;
     }
@@ -45,14 +45,14 @@ function makeWork(arrOfArr, func) {
 // Задание 3
 function worker2(arr) {
   let defference = 0;
-  let min = array[0];
-  let max = array[0];
-   for (let i = 0; i < array.length; i++) { 
-     if (min > array[i]){
-        min = array[i];
+  let min = arr[0];
+  let max = arr[0];
+   for (let i = 0; i < arr.length; i++) { 
+     if (min > arr[i]){
+        min = arr[i];
       }
-     if (max < array[i]){
-       max = array[i];
+     if (max < arr[i]){
+       max = arr[i];
      }
    }
  defference = Math.abs(max - min);
