@@ -5,8 +5,8 @@ class AlarmClock{
     }
     
     addClock (time, callback, id){
-        if (isNaN(id)){
-            throw new Error("error text");
+        if (!id){
+            throw new Error("id не был передан");
         }
   else if (this.alarmCollection.find(item => item.id === id))
   {
@@ -14,41 +14,41 @@ class AlarmClock{
         }
     
   else {
-    return this.alarmCollection.push({id, time, callback});
+     this.alarmCollection.push({id, time, callback});
   }
 }
 
 removeClock(id) {
+    let callLength = this.alarmCollection.length;
     this.alarmCollection.splice(this.alarmCollection.findIndex(item => item.id === id),1);
+    if(callLength < this.alarmCollection.length){
+        return true;
+    }
+    else{
+        return false;
+    }
      }
 
      getCurrentFormattedTime(){
-        const timeNow = new Date();
-        const hours = timeNow.getHours().toString();
-        const minutes = timeNow.getMinutes().toString();
-        let resultTime = "";
-
-      if (minutes.length < 2) {
-           resultTime = hours + ":" + 0 + minutes;
-        }  else if (minutes.length >= 2) {
-           resultTime = hours + ":" + minutes;
-        } 
-     
-        return resultTime
+        //const timeNow = 
+       return new Date().toLocaleTimeString("ru-Ru", {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
     }
 
     start() {
         let checkClock = (alarm) => {
             if (alarm.time === this.getCurrentFormattedTime()) {
-                return alarm.callback();
+             alarm.callback();
             }
         }
-        if (this.timerId === null) {
+        if (!this.timerId) {
             this.timerId = setInterval(() => { this.alarmCollection.forEach(alarm => checkClock(alarm)) }, 1000)
         }
     }
     stop(){
-        if(this.timerId !== undefined){
+        if(this.timerId){
           clearInterval(this.timerId);
           this.timerId = null;
         }
