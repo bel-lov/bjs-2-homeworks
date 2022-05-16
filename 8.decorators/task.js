@@ -17,7 +17,6 @@ function cachingDecoratorNew(func) {
       
       if(cache.length > 5){
         cache.shift();
-        cache.push({ 'hash': hash, 'value': result}); 
       }
       console.log("Вычисляем: " + result);
       return "Вычисляем: " + result;
@@ -45,21 +44,17 @@ function cachingDecoratorNew(func) {
 
 
 function debounceDecoratorNew(func, ms) { 
-  let flag = false, 
-    savedArgs,     
-    savedThis; 
-  return function (...args) {  
-    savedArgs = args;      
-    savedThis = this;
-    if (flag) {
-      return;      
-    }    
-    func.apply(this, savedArgs);   
-    flag = true;  
+  let timeout;
+  let flag = false;
+  return function(){
+    const fnCall = ()=> {func.apply(this, arguments)}
     
-    setTimeout(() => {              
-    func.apply(savedThis, savedArgs); 
-    }, ms);
+      clearTimeout(timeout);
+      timeout = setTimeout(fnCall, ms)
+    if(!flag){
+      flag = true;
+      return fnCall();
+    }
   };
 }
 
@@ -75,13 +70,27 @@ setTimeout(upgradedSendSignal, 2300); // проигнорировано так �
 setTimeout(upgradedSendSignal, 4400); // Сигнал отправлен так как времени от последнего вызова прошло: 4400-2300=2100 (2100 > 2000)
 setTimeout(upgradedSendSignal, 4500); // Сигнал будет отправлен, так как последний вызов debounce декоратора (спустя 4500 + 2000 = 6500) 6,5с
 
-
-
-function debounceDecorator2(func) {
-    function wrapper(...args) { 
-      wrapper.count += 1;
-      return func.call(this, ...args);
-    }  
-  wrapper.count = 0;
+function debounceDecorator2(func, ms) { 
+  let timeout;
+  let flag = false;
+  debounceDecorator2.count = 0;
+  return function(){
+    const fnCall = ()=> {func.apply(this, arguments)}
+    debounceDecorator2.count++
+      clearTimeout(timeout);
+      timeout = setTimeout(fnCall, ms)
+    // fnCall.count += 1;
+    console.log(debounceDecorator2.count);
+    if(!flag){
+      flag = true;
+      return fnCall();
+    } 
+  };
 }
+
+
+
+
+
+
 
