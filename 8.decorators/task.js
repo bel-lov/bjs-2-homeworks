@@ -73,14 +73,14 @@ setTimeout(upgradedSendSignal, 4500); // Сигнал будет отправл�
 function debounceDecorator2(func, ms) { 
   let timeout;
   let flag = false;
-  debounceDecorator2.count = 0;
+  func.count = 0;
   return function(){
     const fnCall = ()=> {func.apply(this, arguments)}
-    debounceDecorator2.count++
+    func.count++
       clearTimeout(timeout);
       timeout = setTimeout(fnCall, ms)
-    // fnCall.count += 1;
-    console.log(debounceDecorator2.count);
+    
+    console.log(func.count);
     if(!flag){
       flag = true;
       return fnCall();
